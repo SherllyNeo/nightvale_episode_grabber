@@ -11,6 +11,7 @@ class nv_downloader:
         self.mp4_folder = "./mp4_folder"
         self.output_folder = "./nightvale"
     
+    
     def verify_title(self,title):
         """ worlds ugliest title verification """
         try:
@@ -26,6 +27,8 @@ class nv_downloader:
 
 
     def download_latest_video(self):
+        """ goes through recent rss episodes and downloads the most recent 
+        if it is the correct nightvale format """
         i = 1
         most_recent_video_link = self.newsfeed.entries[0]['link']
         video = YouTube(most_recent_video_link)
@@ -45,13 +48,14 @@ class nv_downloader:
         return download_title
 
     def convert_mp4_to_wav(self,input_name,output_name):
+        """ uses ffmpeg to convert the video to wav file only """
         command_turn_mp4_to_wav = f"ffmpeg -i {self.mp4_folder}/{input_name} -ab 160k -ac 2 -ar 44100 -vn {self.output_folder}/{output_name}"
         subprocess.call(command_turn_mp4_to_wav, shell=True)
     
     def main(self):
         """ main function to download a nightvale episode and convert it to audio only """
         ep = self.download_latest_video()
-        self.convert_mp4_to_wav(ep+".mp4",ep+"_mp3.mp3")
+        self.convert_mp4_to_wav(ep+".mp4",ep+"_wav.wav")
         os.remove(f"{self.mp4_folder}/{ep}.mp4")
         print("fin")
 
