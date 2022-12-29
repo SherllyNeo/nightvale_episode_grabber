@@ -7,7 +7,7 @@ import os
 class nv_downloader:
     def __init__(self):
         self.channel_id = 'UCrvuY59InDI3iKvopKT8PEw'
-        self.newsfeed = feedparser.parse(f"https://www.youtube.com/feeds/videos.xml?channel_id={self.channel_id}")
+        self.newsfeed = feedparser.parse(f"https://www.scriptbarrel.com/xml.cgi?channel_id={self.channel_id}")
         self.mp4_folder = "./mp4_folder"
         self.output_folder = "./nightvale"
     
@@ -48,10 +48,25 @@ class nv_downloader:
         return download_title
 
     def convert_mp4_to_wav(self,input_name,output_name):
-        """ uses ffmpeg to convert the video to wav file only """
-        command_turn_mp4_to_wav = f"ffmpeg -i {self.mp4_folder}/{input_name} -ab 160k -ac 2 -ar 44100 -vn {self.output_folder}/{output_name}"
+        """ uses sox to convert the video to wav file only """
+         os.system(f'mkdir -p {self.output_folder}')
+        command_turn_mp4_to_wav = f"sox {self.mp4_folder}/{input_name} -r 22050 -c 1 -b 16 -t wav {self.output_folder}{output_name}"
         subprocess.call(command_turn_mp4_to_wav, shell=True)
-    
+
+    def download_most_recent_50(self):
+        for video_url in self.newsfeed.entries:
+            
+            yt_vid = YouTube(video_url.link)
+            if self.verify_title(yt_vid.title):
+                download_title = video.title.split('-')[0].strip()
+                video.streams.filter(progressive = True, 
+                file_extension = "mp4").first().download(output_path = self.mp4_folder, 
+                filename = f"{download_title}.mp4")
+                print(f"downloading {download_title}")
+                self.convert_mp4_to_wav(download_title,download_title+"_wav.wav")
+                os.remove(f"{self.mp4_folder}/{download_title}")
+                print("converted to wav...")
+            
     def main(self):
         """ main function to download a nightvale episode and convert it to audio only """
         ep = self.download_latest_video()
