@@ -50,8 +50,10 @@ class nv_downloader:
     def convert_mp4_to_wav(self,input_name,output_name):
         """ uses sox to convert the video to wav file only """
         os.system(f'mkdir -p {self.output_folder}')
-        command_turn_mp4_to_wav = f"sox {self.mp4_folder}/{input_name}.mp4 -r 22050 -c 1 -b 16 -t wav {self.output_folder}{output_name}"
-        subprocess.call(command_turn_mp4_to_wav, shell=True)
+        mp4_to_wav = f"ffmpeg -i ffmpeg -i {self.mp4_folder}/{input_name}.mp4 -vn -acodec pcm_s16le -ar 44100 -ac 2 {self.mp4_folder}/{input_name}.wav"
+        wav_to_wav = f"sox {self.mp4_folder}/{input_name}.wav -r 22050 -c 1 -b 16 -t wav {self.output_folder}{output_name}"
+        subprocess.call(mp4_to_wav, shell=True)
+        subprocess.call(wav_to_wav, shell=True)
 
     def download_most_recent_50(self):
         for video_url in self.newsfeed.entries:
@@ -65,6 +67,7 @@ class nv_downloader:
                 print(f"downloading {download_title}")
                 self.convert_mp4_to_wav(download_title,download_title+"_wav.wav")
                 os.remove(f"{self.mp4_folder}/{download_title}.mp4")
+                os.remove(f"{self.mp4_folder}/{download_title}.wav")
                 print("converted to wav...")
             
     def main(self):
