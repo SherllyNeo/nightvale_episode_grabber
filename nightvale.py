@@ -50,7 +50,7 @@ class nv_downloader:
     def convert_mp4_to_wav(self,input_name,output_name):
         """ uses sox to convert the video to wav file only """
         os.system(f'mkdir -p {self.output_folder}')
-        command_turn_mp4_to_wav = f"sox {self.mp4_folder}/{input_name} -r 22050 -c 1 -b 16 -t wav {self.output_folder}{output_name}"
+        command_turn_mp4_to_wav = f"sox {self.mp4_folder}/{input_name}.mp4 -r 22050 -c 1 -b 16 -t wav {self.output_folder}{output_name}"
         subprocess.call(command_turn_mp4_to_wav, shell=True)
 
     def download_most_recent_50(self):
@@ -70,7 +70,7 @@ class nv_downloader:
     def main(self):
         """ main function to download a nightvale episode and convert it to audio only """
         ep = self.download_latest_video()
-        self.convert_mp4_to_wav(ep+".mp4",ep+"_wav.wav")
+        self.convert_mp4_to_wav(ep,ep+"_wav.wav")
         os.remove(f"{self.mp4_folder}/{ep}.mp4")
         print("fin")
 
