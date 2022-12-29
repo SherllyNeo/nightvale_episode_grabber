@@ -50,7 +50,7 @@ class nv_downloader:
     def convert_mp4_to_wav(self,input_name,output_name):
         """ uses sox to convert the video to wav file only """
         os.system(f'mkdir -p {self.output_folder}')
-        mp4_to_wav = f"ffmpeg -i ffmpeg -i {self.mp4_folder}/{input_name}.mp4 -vn -acodec pcm_s16le -ar 44100 -ac 2 {self.mp4_folder}/{input_name}.wav"
+        mp4_to_wav = f"ffmpeg -i {self.mp4_folder}/{input_name}.mp4 -vn -acodec pcm_s16le -ar 44100 -ac 2 {self.mp4_folder}/{input_name}.wav"
         wav_to_wav = f"sox {self.mp4_folder}/{input_name}.wav -r 22050 -c 1 -b 16 -t wav {self.output_folder}/{output_name}_wav.wav"
         subprocess.call(mp4_to_wav, shell=True)
         subprocess.call(wav_to_wav, shell=True)
