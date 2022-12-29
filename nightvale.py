@@ -49,7 +49,7 @@ class nv_downloader:
 
     def convert_mp4_to_wav(self,input_name,output_name):
         """ uses sox to convert the video to wav file only """
-         os.system(f'mkdir -p {self.output_folder}')
+        os.system(f'mkdir -p {self.output_folder}')
         command_turn_mp4_to_wav = f"sox {self.mp4_folder}/{input_name} -r 22050 -c 1 -b 16 -t wav {self.output_folder}{output_name}"
         subprocess.call(command_turn_mp4_to_wav, shell=True)
 
@@ -77,5 +77,5 @@ class nv_downloader:
 
 def entrypoint():
     nightvale_downloader = nv_downloader()
-    nightvale_downloader.main()
+    nightvale_downloader.download_most_recent_50()
 entrypoint()
