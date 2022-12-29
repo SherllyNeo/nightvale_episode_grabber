@@ -64,7 +64,7 @@ class nv_downloader:
                 filename = f"{download_title}.mp4")
                 print(f"downloading {download_title}")
                 self.convert_mp4_to_wav(download_title,download_title+"_wav.wav")
-                os.remove(f"{self.mp4_folder}/{download_title}")
+                os.remove(f"{self.mp4_folder}/{download_title}.mp4")
                 print("converted to wav...")
             
     def main(self):
