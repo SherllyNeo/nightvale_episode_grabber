@@ -58,8 +58,8 @@ class nv_downloader:
             
             yt_vid = YouTube(video_url.link)
             if self.verify_title(yt_vid.title):
-                download_title = video.title.split('-')[0].strip()
-                video.streams.filter(progressive = True, 
+                download_title = yt_vid.title.split('-')[0].strip()
+                yt_vid.streams.filter(progressive = True, 
                 file_extension = "mp4").first().download(output_path = self.mp4_folder, 
                 filename = f"{download_title}.mp4")
                 print(f"downloading {download_title}")
