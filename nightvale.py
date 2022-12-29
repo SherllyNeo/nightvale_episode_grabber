@@ -51,7 +51,7 @@ class nv_downloader:
         """ uses sox to convert the video to wav file only """
         os.system(f'mkdir -p {self.output_folder}')
         mp4_to_wav = f"ffmpeg -i ffmpeg -i {self.mp4_folder}/{input_name}.mp4 -vn -acodec pcm_s16le -ar 44100 -ac 2 {self.mp4_folder}/{input_name}.wav"
-        wav_to_wav = f"sox {self.mp4_folder}/{input_name}.wav -r 22050 -c 1 -b 16 -t wav {self.output_folder}{output_name}"
+        wav_to_wav = f"sox {self.mp4_folder}/{input_name}.wav -r 22050 -c 1 -b 16 -t wav {self.output_folder}/{output_name}_wav.wav"
         subprocess.call(mp4_to_wav, shell=True)
         subprocess.call(wav_to_wav, shell=True)
 
@@ -65,7 +65,7 @@ class nv_downloader:
                 file_extension = "mp4").first().download(output_path = self.mp4_folder, 
                 filename = f"{download_title}.mp4")
                 print(f"downloading {download_title}")
-                self.convert_mp4_to_wav(download_title,download_title+"_wav.wav")
+                self.convert_mp4_to_wav(download_title,download_title)
                 os.remove(f"{self.mp4_folder}/{download_title}.mp4")
                 os.remove(f"{self.mp4_folder}/{download_title}.wav")
                 print("converted to wav...")
@@ -73,7 +73,7 @@ class nv_downloader:
     def main(self):
         """ main function to download a nightvale episode and convert it to audio only """
         ep = self.download_latest_video()
-        self.convert_mp4_to_wav(ep,ep+"_wav.wav")
+        self.convert_mp4_to_wav(ep,ep)
         os.remove(f"{self.mp4_folder}/{ep}.mp4")
         print("fin")
 
